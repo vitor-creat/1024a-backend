@@ -187,7 +187,7 @@ routes.get("/quantidade_pedidos", async(req,res)=>{
  routes.get("/quantidade_pedido_clientes", async(req, res) => {
   try {
     const [dados, campos] = await connection.execute(
-      "SELECT idclientes, idpedidos FROM clientes c INNER JOIN  ",
+      "SELECT clientes.nome, COUNT(pedidos.idpedidos) FROM clientes INNER JOIN pedidos ON clientes.idclientes = pedidos clientes_idclientes GROUP BY clientes.nome;",
     )
     res.status(200).json({dados})
   } catch (err) {
