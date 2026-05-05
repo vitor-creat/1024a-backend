@@ -5,10 +5,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev":"tsx watch src/index",
-    "lista":"tsx src/atividades/lista.ts",
-    "exer_rev":"tsx src/atividades/exercicios_revisão.ts",
-    "lista_p":"tsx src/atividades/lista_promise.ts",
+    "dev": "tsx watch src/index",
+    "lista": "tsx src/atividades/lista.ts",
+    "exer_rev": "tsx src/atividades/exercicios_revisão.ts",
+    "lista_p": "tsx src/atividades/lista_promise.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,10 +23,12 @@
   },
   "homepage": "https://github.com/vitor-creat/1024a-backend#readme",
   "dependencies": {
+    "cors": "^2.8.6",
     "express": "^5.2.1",
     "mysql2": "^3.18.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.3.0",
     "tsx": "^4.21.0",
