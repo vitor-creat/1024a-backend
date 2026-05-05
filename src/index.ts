@@ -2,7 +2,7 @@ import express from 'express';
 import rotas from "./routes.js";
 import cors from 'cors'
 const app = express()
-app.use(cors)
+app.use(cors())
 // Fala para a aplicação qual arquivo ela deve usar para rotas
 app.use(express.json())
 

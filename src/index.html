@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .dados{
+            width: 250px;
+            height: 250px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="dados"></div>
+    <script>
+        async function buscaDado(){
+            //Buscar dados na API  -> fetch
+            const resposta = await fetch("http://localhost:8000/cliente_data_pedido")
+            const dados = await resposta.json()
+            console.log(dados)
+            let textContent = ""
+            dados.forEach(dado => {
+                textContent+=
+            });
+        }
+        buscaDado()
+        
+        const divDados = document.getElementById("dados")
+        divDados.innerHTML = buscaDado()
+    </script>
+</html>
