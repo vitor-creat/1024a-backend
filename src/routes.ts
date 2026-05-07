@@ -143,7 +143,7 @@ routes.get("/cliente_data_pedido", async(req,res) =>{
      const [dados, campos] = await connection.execute(
       "SELECT nome,datapedido FROM clientes c INNER JOIN pedidos p ON c.idclientes=p.clientes_idclientes"
     )
-    res.status(200).json({dados})
+    res.status(200).json(dados)
   } catch (err) {
     const mysqlErrorHandle = new MysqlErrorHandle(err, res)
     mysqlErrorHandle.verificaErroDB()
@@ -160,7 +160,7 @@ routes.get("/pedidos_2026", async(req, res) => {
     const [dados, campos] = await connection.execute(
       "SELECT idclientes, nome, cidade, idade, idpedidos, datapedido FROM clientes c INNER JOIN pedidos p ON c.idclientes=p.clientes_idclientes WHERE datapedido BETWEEN '2026-01-01' AND '2026-12-31';"
     )
-    res.status(200).json({dados})
+    res.status(200).json(dados)
   } catch (err) {
     const mysqlErrorHandle = new MysqlErrorHandle(err, res)
     mysqlErrorHandle.verificaErroDB()
@@ -190,7 +190,7 @@ routes.get("/quantidade_pedidos", async(req,res)=>{
     const [dados, campos] = await connection.execute(
       "SELECT clientes.nome, COUNT(pedidos.idpedidos) FROM clientes INNER JOIN pedidos ON clientes.idclientes = pedidos clientes_idclientes GROUP BY clientes.nome;",
     )
-    res.status(200).json({dados})
+    res.status(200).json(dados)
   } catch (err) {
     const mysqlErrorHandle = new MysqlErrorHandle(err, res)
     mysqlErrorHandle.verificaErroDB()
