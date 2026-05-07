@@ -4,30 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <style>
-        .dados{
-            width: 250px;
-            height: 250px;
-            background-color: red;
-        }
-    </style>
 </head>
 <body>
-    <div class="dados"></div>
+    <div id="dados"></div>
     <script>
         async function buscaDado(){
             //Buscar dados na API  -> fetch
             const resposta = await fetch("http://localhost:8000/cliente_data_pedido")
             const dados = await resposta.json()
+            const divDados = document.getElementById("dados")
             console.log(dados)
-            let textContent = ""
-            dados.forEach(dado => {
-                textContent+=
-            });
+            for (let i = 0; i < dados.length; i++) {
+                divDados.innerHTML += `<p> Nome: ${dados[i].nome} -- Data do pedido: ${dados[i].datapedido}</p>` 
+            }
         }
         buscaDado()
-        
-        const divDados = document.getElementById("dados")
-        divDados.innerHTML = buscaDado()
     </script>
 </html>
