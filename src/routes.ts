@@ -71,11 +71,11 @@ routes.post("/pessoas", async (req, res) => {
 
 // Crie uma rota chamada `cadastro_produto` que eu possa enviar
 // um JSON para cadastrar um novo produto no banco de dados
-routes.post("/cadastro_produto", async(req,res)=>{
+routes.post("/cadastro_produtso", async(req,res)=>{
   const {id, nome, categoria, preco, data_criacao, data_modificacao} = req.body
   try {
     const [result] = await connection.execute<ResultSetHeader>(
-      "INSERT INTO produto VALUES (?,?,?,?,?,?)",
+      "INSERT INTO produtos VALUES (?,?,?,?,?,?)",
       [id, nome, categoria, preco, data_criacao, data_modificacao],
     );
     if (result.affectedRows === 0) {
@@ -91,7 +91,7 @@ routes.post("/cadastro_produto", async(req,res)=>{
 routes.get("/listar_produtos", async(req,res)=>{
   try {
     const [dados, campos] = await connection.execute<IProduto[]>(
-    "SELECT * FROM produto"
+    "SELECT * FROM produtos"
   )
   res.status(200).json({dados})
   } catch (err) {
@@ -122,7 +122,7 @@ routes.get("/listar_produtos_informatica", async(req,res)=>{
 routes.get("/listar_produtos_caros", async(req,res)=>{
   try {
     const [dados, campos] = await connection.execute<IProduto[]>(
-      "SELECT * FROM produto WHERE preco > 100"
+      "SELECT * FROM produtos WHERE preco > 100"
     )
     res.status(200).json(dados)
   } catch (err) {
