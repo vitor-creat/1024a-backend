@@ -211,6 +211,18 @@ routes.post("/cadastrar_clientes", async (req,res) =>{
   }
 })
 
+routes.post("/cadastro_produto_v2", async (req,res) =>{
+  const {id, nome, preco, categoria_idcategoria} = req.body
+  const data_criacao = new Date()
+
+  try {
+    const [result] = await connection.execute<ResultSetHeader>("INSERT INTO produtos VALUES (?,?,?,?,?)", [id, nome, preco, categoria_idcategoria,data_criacao])
+    res.status(201).json({mensage: "sucesso ao inserir"},)
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err,res)
+    mysqlErrorHandle.verificaErroDB()
+  }
+})
 
 
 export default routes;
