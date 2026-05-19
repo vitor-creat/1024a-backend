@@ -197,5 +197,20 @@ routes.get("/quantidade_pedidos", async(req,res)=>{
   }
 })
 
+routes.post("/cadastrar_clientes", async (req,res) =>{
+  const {id, nome, cidade, idade} = req.body
+  if (id == null || id == "" || nome == null || nome == "") {
+    res.status(400).json({mesage:"o nome ou o id não podem ser vazios"})
+  }
+  try {
+    const [result] = await connection.execute<ResultSetHeader>("INSERT INTO clientes VALUES (?,?,?,?)", [id, nome, cidade, idade])
+    res.status(201).json({mensage: "sucesso ao inserir"},)
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err,res)
+    mysqlErrorHandle.verificaErroDB()
+  }
+})
+
+
 
 export default routes;
