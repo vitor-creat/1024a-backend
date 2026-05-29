@@ -212,17 +212,53 @@ routes.post("/cadastrar_clientes", async (req,res) =>{
 })
 
 routes.post("/cadastro_produto_v2", async (req,res) =>{
-  const {id, nome, preco, categoria_idcategoria} = req.body
+  const {id, nome, preco, categoria} = req.body
   const data_criacao = new Date()
 
   try {
-    const [result] = await connection.execute<ResultSetHeader>("INSERT INTO produtos VALUES (?,?,?,?,?)", [id, nome, preco, categoria_idcategoria,data_criacao])
+    const [result] = await connection.execute<ResultSetHeader>(`INSERT INTO produto VALUES (?,?,?,?,?,?)`, [id, nome, categoria, preco, data_criacao, null])
     res.status(201).json({mensage: "sucesso ao inserir"},)
   } catch (err) {
     const mysqlErrorHandle = new MysqlErrorHandle(err,res)
     mysqlErrorHandle.verificaErroDB()
   }
 })
+
+routes.put("/produto/:id", async(req,res)=>{
+  const {id} = req.params
+  let {nome, preco, categoria} = req.body
+
+  if (!nome) {
+    return res.status(400).json({mensagem:"O campo nome é obrigatório"})
+  }
+
+  preco = preco ?? null
+  categoria = categoria ?? null
+
+  try {
+    const [result] = await connection.execute<ResultSetHeader>("UPDATE produto SET nome = ?, preco = ?, categoria = ? where id = ?", [nome,preco,categoria,id])
+    res.status(200).json({mensage:"Sucesso ao atualizar"})
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err,res)
+    mysqlErrorHandle.verificaErroDB()
+  }
+})
+routes.put("/produtos/:id", async(req,res)=>{
+  const {id} = req.params
+  let {nome} = req.body
+
+  if (!nome) {
+    return res.status(400).json({mensagem:"O campo nome é obrigatório"})
+  }
+  try {
+    const [result] = await connection.execute<ResultSetHeader>("UPDATE produto SET nome = ? where id = ?", [nome,id])
+    res.status(200).json({mensage:"Sucesso ao atualizar"})
+  } catch (err) {
+    const mysqlErrorHandle = new MysqlErrorHandle(err,res)
+    mysqlErrorHandle.verificaErroDB()
+  }
+})
+
 
 
 export default routes;
