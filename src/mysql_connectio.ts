@@ -6,7 +6,7 @@ import mysql, {
 const connection = mysql.createPool({
   host: "localhost",
   user: "root",
-  database: "dbteremercado",
+  database: "luademel",
 });
 
 export default connection
