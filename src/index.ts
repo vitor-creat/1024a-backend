@@ -1,5 +1,6 @@
 import express from 'express';
-import rotas from "./routes.js";
+import rotas from "./routes/routes.js";
+
 import cors from 'cors'
 const app = express()
 app.use(cors())
@@ -12,6 +13,7 @@ app.use(express.json())
 
 let PORT = 8000
 app.use(rotas)
+
 app.listen(8000, ()=>{
   console.log(`Iniciando o servidor na porta 8000. http://localhost:${PORT}`)
 })
