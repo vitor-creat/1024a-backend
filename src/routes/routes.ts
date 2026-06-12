@@ -203,6 +203,64 @@ routes.put("/produto_completo/:id", async(req,res)=>{
 })
 
 
+/*## Exercicio 1
+
+**Crie a rota DELETE /produto/:id. O id vem pela URL. Se não existir, retornar 404. Se deletado, retornar 200.***/
+routes.delete("/produto/:id", async (req, res) => {
+  const {id} = req.params
+  try {
+    const [result] = await connection.execute("DELETE FROM produto WHERE id = ?", [id])
+    res.status(200).json({mensage: "produto deletado"})
+  } catch (err) {
+    const adapter = new ExpressResponse(res)
+    const mysqlErrorHandle = new MysqlErrorHandle(err,adapter)
+    mysqlErrorHandle.verificaErroDB()
+  }
+});
+
+
+// ## Exercicio 2
+
+// **Crie a rota DELETE /pessoa/:id. O id vem pela URL. 
+// Fazer um SELECT antes de deletar para verificar existência. Se não existir, retornar 404. Se deletado, retornar 200.**
+
+routes.delete("/pessoa/:id", async(req, res) => {
+  const {id} = req.params
+  try {
+
+    const [dados] = await connection.execute<RowDataPacket[]>("SELECT * FROM pessoa WHERE id = ?", [id])
+    if (dados.length == 0 ) {
+      return res.status(404).json({mensage: "esse usuario não existe"})
+    }
+    await connection.execute("DELETE FROM pessoa WHERE id = ?", [id])
+    
+  } catch (err) {
+    const adapter = new ExpressResponse(res)
+    const mysqlErrorHandle = new MysqlErrorHandle(err,adapter)
+    mysqlErrorHandle.verificaErroDB()
+  }
+})
+
+// ## Exercicio 3
+// **Crie a rota DELETE /produto_categoria/:categoria. A categoria vem pela URL. 
+// Se não existir nenhum produto nessa categoria, retornar 404. Se deletar, retornar 200 com "X produtos deletados com sucesso!".**
+
+routes.delete("/produto_categoria/:categoria", async (req,res) =>{
+  const {categoria} = req.params
+  try {
+  const [dados] = await connection.execute<RowDataPacket[]>("SELECT * FROM produto WHERE categoria = ?", [categoria])
+  if (dados.length == 0 ) {
+    return res.status(404).json({mensage: "esse usuario não existe"})
+  }
+  await connection.execute("DELETE FROM produto WHERE categoria = ?", [categoria])
+  res.status(200).json({mensage: `${dados.length} produtos deletados com sucesso`})
+  } catch (err) {
+    const adapter = new ExpressResponse(res)
+    const mysqlErrorHandle = new MysqlErrorHandle(err,adapter)
+    mysqlErrorHandle.verificaErroDB()
+  }
+})
+
 
 
 
