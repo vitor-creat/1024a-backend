@@ -1,0 +1,34 @@
+@baseUrl = http://localhost:3000
+
+###
+PATCH {{baseUrl}}/pessoa/1
+Content-Type: application/json
+
+{
+    "nome": "João Pedro Silva"
+}
+
+###
+PATCH {{baseUrl}}/produto/1
+Content-Type: application/json
+
+{
+    "preco": 3999.90
+}
+
+###
+PATCH {{baseUrl}}/produto_categoria
+Content-Type: application/json
+
+{
+    "categoria_atual": "Perifericos",
+    "nova_categoria": "Acessorios"
+}
+
+###
+PATCH {{baseUrl}}/produto_desconto/1
+Content-Type: application/json
+
+{
+    "percentual_desconto": 15
+}

@@ -1,0 +1,48 @@
+@baseUrl = http://localhost:3000
+
+###
+POST {{baseUrl}}/cadastrar_clientes
+Content-Type: application/json
+
+{
+    "id": 10,
+    "nome": "Vitor",
+    "cidade": "Navirai",
+    "idade": 18
+}
+
+###
+POST {{baseUrl}}/cadastro_produto_v2
+Content-Type: application/json
+
+{
+    "id": 20,
+    "nome": "Headset HyperX",
+    "categoria": "Perifericos",
+    "preco": 350
+}
+
+###
+POST {{baseUrl}}/cadastro_multiplos_produtos
+Content-Type: application/json
+
+[
+    {
+        "id": 30,
+        "nome": "Mouse Logitech",
+        "categoria": "Perifericos",
+        "preco": 180
+    },
+    {
+        "id": 31,
+        "nome": "Monitor Samsung",
+        "categoria": "Informatica",
+        "preco": 1200
+    },
+    {
+        "id": 32,
+        "nome": "Webcam Logitech",
+        "categoria": "Perifericos",
+        "preco": 250
+    }
+]

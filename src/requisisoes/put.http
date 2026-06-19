@@ -1,0 +1,39 @@
+@baseUrl = http://localhost:3000
+
+###
+PUT {{baseUrl}}/produtos/1
+Content-Type: application/json
+
+{
+    "nome": "Notebook Atualizado",
+    "preco": 4500,
+    "categoria": "Tecnologia"
+}
+
+###
+PUT {{baseUrl}}/produto/1
+Content-Type: application/json
+
+{
+    "nome": "Notebook Acer Nitro",
+    "preco": 5000,
+    "categoria": "Computadores"
+}
+
+###
+PUT {{baseUrl}}/produto_preco/1
+Content-Type: application/json
+
+{
+    "nome": "Notebook Acer Nitro",
+    "preco": 3999,
+    "categoria": "Computadores"
+}
+
+###
+PUT {{baseUrl}}/produto_completo/1
+Content-Type: application/json
+
+{
+    "preco": 3500
+}

@@ -1,0 +1,10 @@
+@baseUrl = http://localhost:3000
+
+###
+DELETE {{baseUrl}}/produto/5
+
+###
+DELETE {{baseUrl}}/pessoa/5
+
+###
+DELETE {{baseUrl}}/produto_categoria/Moveis
