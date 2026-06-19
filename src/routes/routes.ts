@@ -93,22 +93,6 @@ routes.put("/produtos/:id", async(req,res)=>{
   }
 })
 
-// routes.put("/produtos/:id", async(req,res)=>{
-//   const {id} = req.params
-//   let {nome} = req.body
-
-//   if (!nome) {
-//     return res.status(400).json({mensagem:"O campo nome é obrigatório"})
-//   }
-//   try {
-//     const [result] = await connection.execute<ResultSetHeader>("UPDATE produto SET nome = ? where id = ?", [nome,id])
-//     res.status(200).json({mensage:"Sucesso ao atualizar"})
-//   } catch (err) {
-//     const mysqlErrorHandle = new MysqlErrorHandle(err,res)
-//     mysqlErrorHandle.verificaErroDB()
-//   }
-// })
-
 
 /*
 ## Exercício 2
