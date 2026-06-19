@@ -202,6 +202,168 @@ routes.put("/produto_completo/:id", async(req,res)=>{
   }
 })
 
+// ## Exercicio 1
+
+// **Crie a rota PATCH /pessoa/:id. O cliente envia apenas o novo nome pelo body. 
+// O servidor deve verificar se a pessoa existe — se não existir, retornar 404. 
+// Se o campo nome não for enviado, retornar 400. Se atualizar com sucesso, retornar 200.**
+
+routes.patch("/pessoa/:id", async (req, res) => {
+  const { id } = req.params;
+  let { nome } = req.body;
+
+  if (!nome) {
+    return res.status(400).json({mensagem: "O campo nome é obrigatório",});
+  }
+
+  try {
+    const [dados] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM pessoa WHERE id = ?",
+      [id]
+    );
+
+    if (dados.length === 0) {
+      return res.status(404).json({
+        mensagem: "Pessoa não encontrada",
+      });
+    }
+
+    await connection.execute<ResultSetHeader>(
+      "UPDATE pessoa SET nome = ? WHERE id = ?",
+      [nome, id]
+    );
+
+    res.status(200).json({mensagem: "Pessoa atualizada com sucesso",});
+  } catch (err) {
+    const adapter = new ExpressResponse(res);
+    const mysqlErrorHandle = new MysqlErrorHandle(err, adapter);
+    mysqlErrorHandle.verificaErroDB();
+  }
+});
+
+
+
+// ## Exercicio 2
+
+// **Crie a rota PATCH /produto/:id. O cliente pode enviar qualquer combinação de nome, preco e categoria. 
+// Os campos não enviados devem manter o valor atual do banco usando ??. 
+// Atualizar data_modificacao automaticamente. Retornar 404 se não encontrar, 200 se atualizar.**
+
+
+routes.patch("/produto/:id", async (req, res) => {
+  const { id } = req.params;
+  let { nome, preco, categoria } = req.body;
+
+  try {
+    const [dados] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM produto WHERE id = ?",[id]
+    );
+
+    if (dados.length === 0) {
+      return res.status(404).json({mensagem: "Produto não encontrado"});
+    }
+
+    const produto = dados[0];
+
+    nome = nome ?? produto!.nome;
+    preco = preco ?? produto!.preco;
+    categoria = categoria ?? produto!.categoria;
+
+    const data_modificacao = new Date();
+
+    await connection.execute<ResultSetHeader>(
+      `UPDATE produto SET nome = ?, preco = ?, categoria = ?, data_modificacao = ? WHERE id = ?`,[nome, preco, categoria, data_modificacao, id]
+    );
+
+    res.status(200).json({mensagem: "Produto atualizado com sucesso",});
+  } catch (err) {
+    const adapter = new ExpressResponse(res);
+    const mysqlErrorHandle = new MysqlErrorHandle(err, adapter);
+    mysqlErrorHandle.verificaErroDB();
+  }
+});
+
+
+// ## Exercicio 3
+
+// **Crie a rota PATCH /produto_categoria. O cliente envia categoria_atual e nova_categoria pelo body. 
+// Atualizar a categoria de todos os produtos que tiverem categoria_atual. 
+// Se não existir nenhum, retornar 404. Retornar 200 com "X produtos atualizados com sucesso!".**
+
+routes.patch("/produto_categoria", async (req, res) => {
+  const { categoria_atual, nova_categoria } = req.body;
+
+  try {
+    const [dados] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM produto WHERE categoria = ?",
+      [categoria_atual]
+    );
+
+    if (dados.length === 0) {
+      return res.status(404).json({mensagem: "Nenhum produto encontrado nessa categoria",});
+    }
+
+    const [result] = await connection.execute<ResultSetHeader>(
+      "UPDATE produto SET categoria = ? WHERE categoria = ?", [nova_categoria, categoria_atual]
+    );
+
+    res.status(200).json({mensagem: `${result.affectedRows} produtos atualizados com sucesso!`,});
+  } catch (err) {
+    const adapter = new ExpressResponse(res);
+    const mysqlErrorHandle = new MysqlErrorHandle(err, adapter);
+    mysqlErrorHandle.verificaErroDB();
+  }
+});
+
+
+// ## Exercicio 4
+
+// **Crie a rota PATCH /produto_desconto/:id. O cliente envia percentual_desconto (0 a 100) pelo body.
+// Calcular o novo preço: preco - (preco * percentual / 100). Atualizar data_modificacao. 
+// Retornar 404 se não encontrar, 200 com "Desconto aplicado! Novo preço: R$ X"**
+
+routes.patch("/produto_desconto/:id", async (req, res) => {
+  const { id } = req.params;
+  const { percentual_desconto } = req.body;
+
+  if (percentual_desconto == null || percentual_desconto < 0 || percentual_desconto > 100) {
+    return res.status(400).json({mensagem: "Percentual deve estar entre 0 e 100",});
+  }
+
+  try {
+    const [dados] = await connection.execute<RowDataPacket[]>(
+      "SELECT * FROM produto WHERE id = ?",
+      [id]
+    );
+
+    if (dados.length === 0) {
+      return res.status(404).json({
+        mensagem: "Produto não encontrado",
+      });
+    }
+
+    const produto = dados[0];
+
+    const novoPreco =
+      produto!.preco -(produto!.preco * percentual_desconto) / 100
+
+    const data_modificacao = new Date();
+
+    await connection.execute<ResultSetHeader>(
+      "UPDATE produto SET preco = ?, data_modificacao = ? WHERE id = ?",
+      [novoPreco, data_modificacao, id]
+    );
+
+    res.status(200).json({
+      mensagem: `Desconto aplicado! Novo preço: R$ ${novoPreco.toFixed(2)}`,
+    });
+  } catch (err) {
+    const adapter = new ExpressResponse(res);
+    const mysqlErrorHandle = new MysqlErrorHandle(err, adapter);
+    mysqlErrorHandle.verificaErroDB();
+  }
+});
+
 
 /*## Exercicio 1
 
